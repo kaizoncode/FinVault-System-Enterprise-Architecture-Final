@@ -1,0 +1,297 @@
+/* ==============================================================================
+ * FinVault Enterprise - Main Application Stylesheet
+ * Enterprise Corporate Fintech UI & Live In-Place RBAC Enhancements
+ * ============================================================================== */
+
+:root {
+    --primary-color: #2563eb;
+    --primary-dark: #1d4ed8;
+    --primary-light: #eff6ff;
+    --accent-emerald: #10b981;
+    --accent-amber: #f59e0b;
+    --accent-rose: #ef4444;
+    --dark-surface: #0f172a;
+    --card-bg: #ffffff;
+    --border-color: #e2e8f0;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --shadow-soft: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+    --shadow-hover: 0 10px 25px -3px rgba(0, 0, 0, 0.1);
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: #f8fafc;
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Auth Background */
+.bg-gradient-auth {
+    background: radial-gradient(circle at top right, #e0e7ff 0%, #f1f5f9 60%, #e2e8f0 100%);
+}
+
+.auth-card {
+    border-radius: var(--radius-lg);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+}
+
+.brand-logo-circle {
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    border: 1px solid var(--border-color);
+}
+
+.letter-spacing-lg {
+    letter-spacing: 0.35em;
+}
+
+/* Navbar */
+.navbar-brand-custom {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--dark-surface);
+}
+
+.navbar-blur {
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* System Live Banner */
+.system-banner-bar {
+    background: linear-gradient(90deg, #1e3a8a 0%, #2563eb 50%, #0284c7 100%);
+    color: #ffffff;
+    font-size: 0.875rem;
+    padding: 0.45rem 1rem;
+}
+
+/* Admin Live Edit Mode Bar */
+.admin-live-bar {
+    background: linear-gradient(90deg, #7f1d1d 0%, #dc2626 50%, #b91c1c 100%);
+    color: #ffffff;
+    font-size: 0.85rem;
+    padding: 0.4rem 1rem;
+    box-shadow: 0 2px 8px rgba(220, 38, 38, 0.25);
+}
+
+.live-pulse-dot {
+    width: 10px;
+    height: 10px;
+    background-color: #22c55e;
+    border-radius: 50%;
+    display: inline-block;
+    animation: pulse 1.8s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+    70% { transform: scale(1.15); box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+}
+
+/* In-place Editable Highlights */
+.editable-highlight {
+    cursor: pointer;
+    border-bottom: 1px dashed #dc2626;
+    transition: background-color 0.2s ease;
+}
+
+.editable-highlight:hover {
+    background-color: #fee2e2;
+}
+
+/* Auditor Masking */
+.masked-data {
+    font-family: monospace;
+    letter-spacing: 0.1em;
+    color: #64748b;
+    background: #f1f5f9;
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px dashed #cbd5e1;
+}
+
+/* Cards & Widgets */
+.dashboard-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-soft);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dashboard-card:hover {
+    box-shadow: var(--shadow-hover);
+}
+
+.wallet-card {
+    border-radius: var(--radius-md);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid var(--border-color);
+}
+
+.wallet-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+}
+
+.wallet-card.family-fund-card {
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border-color: #86efac;
+}
+
+/* Health Score Gauge / Badge */
+.health-score-circle {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 6px solid #10b981;
+    font-weight: 700;
+}
+
+.health-score-circle.grade-excellent { border-color: #10b981; color: #047857; }
+.health-score-circle.grade-good { border-color: #3b82f6; color: #1d4ed8; }
+.health-score-circle.grade-fair { border-color: #f59e0b; color: #b45309; }
+.health-score-circle.grade-poor { border-color: #ef4444; color: #b91c1c; }
+
+/* Budget Progress */
+.progress-budget {
+    height: 10px;
+    border-radius: 6px;
+    background-color: #e2e8f0;
+}
+
+/* Toast Container */
+#toast-container {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    z-index: 1090;
+    max-width: 380px;
+}
+
+/* Footer */
+footer {
+    margin-top: auto;
+    border-top: 1px solid var(--border-color);
+    background-color: #ffffff;
+}
+
+/* In-Place RBAC Navigation Smooth Scrolling & Offset */
+html {
+    scroll-behavior: smooth;
+}
+
+#wallets-section,
+#transactions-section,
+#budgets-section,
+#saving-goals-section,
+#loan-calculator-section,
+#bi-analytics-section,
+#family-approval-section,
+#auditor-monitor-section,
+#admin-live-cms-section,
+#admin-recovery-section {
+    scroll-margin-top: 130px;
+}
+
+@keyframes sectionHighlightGlow {
+    0% {
+        box-shadow: 0 0 0 6px rgba(37, 99, 235, 0.45);
+        transform: translateY(-2px);
+    }
+    100% {
+        box-shadow: var(--shadow-soft);
+        transform: translateY(0);
+    }
+}
+
+.section-highlight {
+    animation: sectionHighlightGlow 1.8s ease-out;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+/* Dynamic View Header & Module Blocks */
+#dashboard-view-header {
+    animation: fadeInView 0.3s ease-in-out;
+    background: #ffffff;
+    box-shadow: 0 4px 20px -2px rgba(37, 99, 235, 0.08);
+}
+
+@keyframes fadeInView {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dashboard-module-block {
+    transition: all 0.25s ease-in-out;
+}
+
+#mainDashboardNav .nav-link {
+    transition: all 0.2s ease-in-out;
+    padding-bottom: 0.5rem;
+}
+
+#mainDashboardNav .nav-link:hover {
+    color: var(--primary-color) !important;
+}
+
+/* Universal Modal Styling & Native Fallback (Independent of CDN availability) */
+.modal.show {
+    display: block !important;
+}
+
+body.modal-open {
+    overflow: hidden !important;
+}
+
+.modal-backdrop.show {
+    opacity: 0.5 !important;
+    display: block !important;
+}
+
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1050;
+    width: 100vw;
+    height: 100vh;
+    background-color: #000000;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1055;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    outline: 0;
+}
+

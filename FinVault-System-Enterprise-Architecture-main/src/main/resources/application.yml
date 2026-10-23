@@ -1,0 +1,127 @@
+# ==============================================================================
+# FinVault Enterprise - Application Configuration
+# Enterprise Personal & Family Wealth Management System
+# ==============================================================================
+
+server:
+  port: 8080
+  forward-headers-strategy: framework
+  servlet:
+    context-path: /
+    session:
+      timeout: 60m
+      cookie:
+        http-only: true
+        secure: ${COOKIE_SECURE:false} # Set true in HTTPS production via COOKIE_SECURE=true
+        same-site: lax
+
+spring:
+  application:
+    name: finvault-system
+
+  # Datasource Configuration (H2 File Persistence for Local, easily switchable to MySQL/Postgres via environment variables)
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:h2:file:./data/finvaultdb;DB_CLOSE_DELAY=-1;AUTO_SERVER=TRUE;NON_KEYWORDS=USER,VALUE}
+    driver-class-name: ${SPRING_DATASOURCE_DRIVER_CLASS_NAME:org.h2.Driver}
+    username: ${SPRING_DATASOURCE_USERNAME:sa}
+    password: ${SPRING_DATASOURCE_PASSWORD:password}
+
+  # H2 Web Console Configuration
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: false
+        trace: false
+
+  # JPA & Hibernate Settings (Hibernate 6 automatically detects H2Dialect)
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc:
+          # Timezone consistency: Đồng bộ múi giờ giữa JVM và Database (Asia/Ho_Chi_Minh)
+          # Tránh sai lệch thời gian khóa tài khoản brute-force (locked_until) và lịch trình giao dịch
+          time_zone: Asia/Ho_Chi_Minh
+    open-in-view: false
+    defer-datasource-initialization: true
+
+  # SQL Initialization (Runs schema and initial seed data)
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema.sql
+      data-locations: classpath:data.sql
+      continue-on-error: true
+
+  # Thymeleaf Template Engine Configuration
+  thymeleaf:
+    cache: false
+    mode: HTML
+    encoding: UTF-8
+    prefix: classpath:/templates/
+    suffix: .html
+
+  # File Upload Limits (Receipts & Batch Excel Import)
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 15MB
+
+# ==============================================================================
+# Custom FinVault Enterprise Security & Business Rules Configuration
+# ==============================================================================
+finvault:
+  system:
+    name: "FinVault Enterprise Wealth Management"
+    version: "1.0.0-PROD"
+    environment: "DEVELOPMENT"
+
+  # AES-256-GCM Configuration for JPA Attribute Encryption
+  # 256-bit key represented in Hex format (32 bytes = 64 hex characters)
+  crypto:
+    aes-secret-key: "${FINVAULT_AES_KEY:}"
+
+  # Two-Factor Authentication (TOTP / Google Authenticator)
+  security:
+    totp:
+      issuer: "FinVault Enterprise"
+      window-size: 1
+    brute-force:
+      max-failed-attempts: 5
+      lock-duration-minutes: 15
+
+  # Rate Limiter Configuration (Bucket4j Sliding Window)
+  rate-limit:
+    requests-per-minute: 120
+    burst-capacity: 150
+
+  # Family Ledger Approval & Threshold
+  family:
+    approval-threshold-vnd: 5000000.00 # Giao dịch trên 5.000.000 VND cần Family Head phê duyệt
+
+  # Smart Budget Alert Thresholds (Strategy Pattern)
+  budget:
+    warning-threshold-percent: 80.0
+    critical-threshold-percent: 100.0
+
+# Springdoc OpenAPI (Swagger UI) Configuration
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+    tags-sorter: alpha
+
+# Logging Configuration
+logging:
+  level:
+    root: INFO
+    com.finvault: DEBUG
+    org.springframework.security: INFO
+    org.hibernate.SQL: WARN

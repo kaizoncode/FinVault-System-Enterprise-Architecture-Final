@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập - FinVault Enterprise</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Main CSS -->
+    <link rel="stylesheet" th:href="@{/css/main.css}" href="/css/main.css">
+</head>
+<body class="bg-gradient-auth d-flex align-items-center justify-content-center min-vh-100 py-4">
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-5">
+            <!-- Brand Header -->
+            <div class="text-center mb-4">
+                <div class="brand-logo-circle d-inline-flex align-items-center justify-content-center shadow-sm mb-3">
+                    <i class="bi bi-shield-lock-fill text-primary display-6"></i>
+                </div>
+                <h3 class="fw-bold text-dark mb-1">FinVault Enterprise</h3>
+                <p class="text-muted small">Hệ thống Quản lý Tài chính Doanh nghiệp & Gia đình</p>
+            </div>
+
+            <!-- Login Card -->
+            <div class="card shadow-lg border-0 rounded-4 auth-card">
+                <div class="card-body p-4 p-md-5">
+                    <h4 class="card-title fw-bold text-center mb-4">Đăng Nhập Hệ Thống</h4>
+
+                    <!-- Alert Messages -->
+                    <div th:if="${errorMessage != null}" class="alert alert-danger d-flex align-items-center rounded-3 mb-3 py-2" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill fs-5 me-2"></i>
+                        <span th:text="${errorMessage}">Tên đăng nhập hoặc mật khẩu không chính xác.</span>
+                    </div>
+
+                    <div th:if="${param.error != null and errorMessage == null}" class="alert alert-danger d-flex align-items-center rounded-3 mb-3 py-2" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill fs-5 me-2"></i>
+                        <span>Tên đăng nhập hoặc mật khẩu không chính xác.</span>
+                    </div>
+
+                    <div th:if="${successMessage != null}" class="alert alert-success d-flex align-items-center rounded-3 mb-3 py-2" role="alert">
+                        <i class="bi bi-check-circle-fill fs-5 me-2"></i>
+                        <span th:text="${successMessage}">Đăng xuất an toàn thành công.</span>
+                    </div>
+
+                    <div th:if="${param.logout != null and successMessage == null}" class="alert alert-info d-flex align-items-center rounded-3 mb-3 py-2" role="alert">
+                        <i class="bi bi-info-circle-fill fs-5 me-2"></i>
+                        <span>Bạn đã đăng xuất an toàn khỏi hệ thống.</span>
+                    </div>
+
+                    <div th:if="${param.registered != null}" class="alert alert-success d-flex align-items-center rounded-3 mb-3 py-2" role="alert">
+                        <i class="bi bi-check-circle-fill fs-5 me-2"></i>
+                        <span>Đăng ký tài khoản thành công! Vui lòng đăng nhập.</span>
+                    </div>
+
+                    <div th:if="${param.locked != null and errorMessage == null}" class="alert alert-warning d-flex align-items-center rounded-3 mb-3 py-2" role="alert">
+                        <i class="bi bi-shield-slash-fill fs-5 me-2"></i>
+                        <span>Tài khoản tạm thời bị khóa do sai mật khẩu quá 5 lần. Vui lòng thử lại sau.</span>
+                    </div>
+
+                    <div th:if="${param.expired != null}" class="alert alert-warning d-flex align-items-center rounded-3 mb-3 py-2" role="alert">
+                        <i class="bi bi-clock-history fs-5 me-2"></i>
+                        <span>Phiên đăng nhập của bạn đã hết hạn hoặc tài khoản được đăng nhập từ thiết bị khác.</span>
+                    </div>
+
+                    <div th:if="${param.rateLimited != null}" class="alert alert-warning d-flex align-items-center rounded-3 mb-3 py-2" role="alert">
+                        <i class="bi bi-hourglass-split fs-5 me-2"></i>
+                        <span>Quá nhiều yêu cầu trong thời gian ngắn. Vui lòng đợi 1 phút trước khi thử lại.</span>
+                    </div>
+
+                    <!-- Login Form -->
+                    <form th:action="@{/login}" method="post">
+                        <!-- CSRF Token (handled automatically if CSRF is active) -->
+                        <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+                        <div class="mb-3">
+                            <label for="username" class="form-label fw-semibold small text-secondary">Tên đăng nhập / Email</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-person"></i></span>
+                                <input type="text" class="form-control bg-light border-start-0" id="username" name="username" th:value="${prefillUsername != null ? prefillUsername : (param.switchUser != null ? param.switchUser : '')}" placeholder="Nhập tên đăng nhập" required autofocus>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <label for="password" class="form-label fw-semibold small text-secondary mb-0">Mật khẩu</label>
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-key"></i></span>
+                                <input type="password" class="form-control bg-light border-start-0 border-end-0" id="password" name="password" placeholder="Nhập mật khẩu" required>
+                                <button class="btn btn-light border border-start-0 text-muted" type="button" id="togglePasswordBtn">
+                                    <i class="bi bi-eye" id="togglePasswordIcon"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold shadow-sm mb-3">
+                            <i class="bi bi-box-arrow-in-right me-1"></i> Đăng nhập
+                        </button>
+                    </form>
+
+                    <!-- Quick Demo Roles Selector for Evaluation -->
+                    <div class="demo-login-box mt-3 p-3 bg-light rounded-3 border">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span class="small fw-bold text-uppercase text-muted"><i class="bi bi-lightning-charge-fill text-warning me-1"></i>Tài khoản Demo (4 Roles):</span>
+                        </div>
+                        <div class="d-grid gap-1">
+                            <button type="button" class="btn btn-sm btn-outline-danger text-start d-flex justify-content-between align-items-center py-1" onclick="fillCredentials('admin', 'Password@123')">
+                                <span><i class="bi bi-shield-shaded me-1"></i> <strong>admin</strong> (Super Admin)</span>
+                                <span class="badge bg-danger-subtle text-danger border">Full CMS</span>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-dark text-start d-flex justify-content-between align-items-center py-1" onclick="fillCredentials('auditor', 'Password@123')">
+                                <span><i class="bi bi-fingerprint me-1"></i> <strong>auditor</strong> (System Auditor)</span>
+                                <span class="badge bg-dark-subtle text-dark border">Data Masking</span>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-success text-start d-flex justify-content-between align-items-center py-1" onclick="fillCredentials('family_head', 'Password@123')">
+                                <span><i class="bi bi-people-fill me-1"></i> <strong>family_head</strong> (Gia trưởng)</span>
+                                <span class="badge bg-success-subtle text-success border">Duyệt chi</span>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-primary text-start d-flex justify-content-between align-items-center py-1" onclick="fillCredentials('user1', 'Password@123')">
+                                <span><i class="bi bi-person-fill me-1"></i> <strong>user1</strong> (Standard User)</span>
+                                <span class="badge bg-primary-subtle text-primary border">Ví & 50/30/20</span>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-warning text-dark text-start d-flex justify-content-between align-items-center py-1" onclick="fillCredentials('user_2fa', 'Password@123')">
+                                <span><i class="bi bi-shield-lock-fill me-1"></i> <strong>user_2fa</strong> (Demo 2FA User)</span>
+                                <span class="badge bg-warning-subtle text-dark border">2FA TOTP</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <span class="text-muted small">Chưa có tài khoản?</span>
+                        <a th:href="@{/register}" class="text-decoration-none fw-semibold small text-primary ms-1">Đăng ký ngay</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Note -->
+            <div class="text-center mt-3 text-muted small">
+                &copy; 2026 FinVault Enterprise. Chuẩn bảo mật Spring Security 6 & AES-256-GCM.
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function fillCredentials(username, password) {
+    document.getElementById('username').value = username;
+    document.getElementById('password').value = password;
+}
+
+document.getElementById('togglePasswordBtn').addEventListener('click', function() {
+    const pwdInput = document.getElementById('password');
+    const icon = document.getElementById('togglePasswordIcon');
+    if (pwdInput.type === 'password') {
+        pwdInput.type = 'text';
+        icon.classList.remove('bi-eye');
+        icon.classList.add('bi-eye-slash');
+    } else {
+        pwdInput.type = 'password';
+        icon.classList.remove('bi-eye-slash');
+        icon.classList.add('bi-eye');
+    }
+});
+</script>
+
+<!-- Bootstrap JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

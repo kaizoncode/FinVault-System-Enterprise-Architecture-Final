@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: finvault-system-test
+  datasource:
+    url: jdbc:h2:mem:finvaulttestdb;DB_CLOSE_DELAY=-1;NON_KEYWORDS=USER,VALUE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema.sql
+      data-locations: classpath:data.sql
+      continue-on-error: true
